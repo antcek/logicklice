@@ -15,6 +15,7 @@
     "browserify-zlib": "^0.2.0",
     "https-browserify": "^1.0.0",
     "react": "^18.3.1",
+    "react-css-modules": "^4.7.11",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
     "sass": "^1.77.3",
