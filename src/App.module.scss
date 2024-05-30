@@ -1,0 +1,18 @@
+.app {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+}
+
+.tag-filter {
+  padding: 10px;
+  border-right: 1px solid #ccc;
+}
+
+.course-list {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+}

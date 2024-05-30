@@ -1,26 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import CourseList from "./components/CourseList.tsx";
+import TagFilter from "./components/TagFilter.tsx";
+import { fetchCourses } from "./services/api.ts";
+import styles from "./App.module.scss";
 
-function App() {
+interface Course {
+  id: number;
+  name: string;
+  bgColor: string;
+  tags: string[];
+  image: string;
+}
+
+const App: React.FC = () => {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string>("");
+  useEffect(() => {
+    const getCourses = async () => {
+      const courses = await fetchCourses();
+      setCourses(courses);
+      const allTags = Array.from(
+        new Set(courses.flatMap((course) => course.tags))
+      );
+      setTags(allTags as string[]);
+    };
+    getCourses();
+  }, []);
+
+  useEffect(() => {
+    setFilteredCourses(
+      courses.filter((course) => course.tags.includes(selectedTags))
+    );
+  }, [selectedTags, courses]);
+
+  const handleTagClick = (tag: string) => {
+    setSelectedTags(tag);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={styles["app"]}>
+      <TagFilter
+        tags={tags}
+        selectedTags={selectedTags}
+        onTagClick={handleTagClick}
+      />
+      <CourseList courses={filteredCourses} />
     </div>
   );
-}
+};
 
 export default App;
